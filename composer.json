@@ -1,0 +1,27 @@
+{
+    "name": "thesebas/itertools",
+    "description": "itertools for working with genrators/iterators",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "thesebas",
+            "email": "thesebas@thesebas.net"
+        }
+    ],
+    "autoload": {
+        "files": [
+            "./src/itertools.php"
+        ]
+    },
+    "minimum-stability": "stable",
+    "require": {},
+    "config": {
+        "platform": {
+            "php": "5.6"
+        }
+    },
+    "require-dev": {
+        "kahlan/kahlan": "^4.0"
+    }
+}
