@@ -80,6 +80,21 @@ describe('itertools', function () {
     });
 
     describe('tee', function () {
+        it('should allow to iterate over same generator independently completely with two subiterators', function () {
+
+            $gen = $this->exampleGenerator;
+
+
+            $source = $gen(10);
+
+            list($left, $right) = tee($source);
+
+
+            expect(iterator_to_array($left))->toBe(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']);
+            expect(iterator_to_array($right))->toBe(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']);
+
+
+        });
         it('should allow to iterate over same generator independently with two subiterators', function () {
 
             $gen = $this->exampleGenerator;
@@ -194,9 +209,23 @@ describe('itertools', function () {
             expect(iterator_to_array($actual))->toBe(['0 => a', '1 => b', '2 => c']);
 
         });
+        it('should map iterator to new iterator with keys', function () {
+            $gen = $this->exampleGenerator;
+
+            $data = $gen(10);
+
+            $data = head(skip($data, 3, true), 3, true);
+
+            $actual = map($data, function ($item, $key) {
+                return "{$key} => {$item}";
+            }, true);
+
+            expect(iterator_to_array($actual))->toBe([3 => '3 => d', 4 => '4 => e', 5 => '5 => f']);
+
+        });
 
     });
-    
+
     describe('chunk', function () {
 
         it('should chunk generator into pieces, each at most 3 items', function () {

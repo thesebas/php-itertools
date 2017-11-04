@@ -87,7 +87,7 @@ function tee($iterator, $useKeys = false) {
     $rightPos = 0;
 
     $left = function () use (&$buff, &$iterator, &$leftPos, &$rightPos, $useKeys) {
-        while (true) {
+        while ($iterator->valid() || (!empty($buff) && ($leftPos < $rightPos))) {
             if ($leftPos >= $rightPos) {
                 $val = $useKeys ? [$iterator->key(), $iterator->current()] : $iterator->current();
                 $buff[] = $val;
@@ -97,8 +97,8 @@ function tee($iterator, $useKeys = false) {
             }
             $leftPos += 1;
             if ($useKeys) {
-                list($key, $val) = $val;
-                yield $key => $val;
+                list($key, $_val) = $val;
+                yield $key => $_val;
             } else {
                 yield $val;
             }
@@ -106,7 +106,7 @@ function tee($iterator, $useKeys = false) {
         }
     };
     $right = function () use (&$buff, &$iterator, &$leftPos, &$rightPos, $useKeys) {
-        while (true) {
+        while ($iterator->valid() || (!empty($buff) && ($rightPos < $leftPos))) {
             if ($rightPos >= $leftPos) {
                 $val = $useKeys ? [$iterator->key(), $iterator->current()] : $iterator->current();
                 $buff[] = $val;
@@ -116,18 +116,21 @@ function tee($iterator, $useKeys = false) {
             }
             $rightPos += 1;
             if ($useKeys) {
-                list($key, $val) = $val;
-                yield $key => $val;
+                list($key, $_val) = $val;
+                yield $key => $_val;
             } else {
                 yield $val;
             }
         }
     };
 
-//    $getBuff = function () use (&$buff) {
-//        return $buff;
-//    };
-    return [$left(), $right()/*, $getBuff*/];
+    return [
+        $left(),
+        $right(),
+//        function () use (&$buff) {
+//            return $buff;
+//        }
+    ];
 }
 
 /**
