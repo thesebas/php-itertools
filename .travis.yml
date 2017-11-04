@@ -8,7 +8,7 @@ php:
 install:
     - composer install
 
-script: mkdir reports && vendor/bin/kahlan --reporter=tap:reports/results.tap --reporter=json:reports/results.json --reporter=verbose --coverage=4 --lcov=reports/coverage.txt
+script: mkdir -p build/logs && vendor/bin/kahlan --reporter=tap:reports/results.tap --reporter=json:reports/results.json --reporter=verbose --coverage=4 --clover=build/logs/clover.xml
 
-#after_script:
-#    - php vendor/bin/coveralls -v
+after_script:
+    - php vendor/bin/coveralls -v
