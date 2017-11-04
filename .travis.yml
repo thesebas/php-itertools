@@ -1,0 +1,14 @@
+language: php
+
+php:
+    - 5.6
+    - 7.0
+    - 7.1
+
+install:
+    - composer install
+
+script: mkdir reports && vendor/bin/kahlan --reporter=tap:reports/results.tap --reporter=json:reports/results.json --reporter=verbose --coverage=4 --lcov=reports/coverage.txt
+
+#after_script:
+#    - php vendor/bin/coveralls -v
